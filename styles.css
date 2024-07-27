@@ -27,12 +27,6 @@ button {
     cursor: pointer;
 }
 
-button {
-    padding: 10px 20px;
-    margin-top: 10px;
-    cursor: pointer;
-}
-
 .delete-button {
     background-color: #ff4d4d;
     color: white;
@@ -42,4 +36,3 @@ button {
     padding: 5px 10px;
     margin-left: 10px;
 }
-
