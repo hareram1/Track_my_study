@@ -1,7 +1,4 @@
-let topics = [
-    { topic: "Time Complexity", days: 5, completed: false, streak: 0 },
-    { topic: "Network Address Translation (NAT)", days: 3, completed: false, streak: 0 }
-];
+let topics = JSON.parse(localStorage.getItem('topics')) || [];
 
 function displayTopics() {
     const topicsDiv = document.getElementById('topics');
@@ -20,10 +17,15 @@ function displayTopics() {
     });
 }
 
+function saveTopics() {
+    localStorage.setItem('topics', JSON.stringify(topics));
+}
+
 function addNewTopic() {
     const topicName = prompt("Enter topic name:");
     const days = parseInt(prompt("Enter number of days:"));
     topics.push({ topic: topicName, days: days, completed: false, streak: 0 });
+    saveTopics();
     displayTopics();
 }
 
@@ -34,11 +36,13 @@ function markStudyDay(topicName) {
         }
     });
     checkDeadlines();
+    saveTopics();
     displayTopics();
 }
 
 function deleteTopic(index) {
     topics.splice(index, 1);
+    saveTopics();
     displayTopics();
 }
 
@@ -51,6 +55,7 @@ function checkDeadlines() {
             alert(`You missed the deadline for ${topic.topic}. Time for a punishment!`);
         }
     });
+    saveTopics();
 }
 
-displayTopics();
+document.addEventListener('DOMContentLoaded', displayTopics);
