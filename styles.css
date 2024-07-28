@@ -14,15 +14,10 @@ header, footer {
     background: #f8f8f8;
     text-align: center;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    z-index: 10;
 }
-
 
 header {
     top: 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
 }
 
 footer {
@@ -42,65 +37,32 @@ header .logo {
     height: 40px;
 }
 
-.header-left {
-    display: flex;
-    align-items: center;
-}
-
 header .add-new-topic {
     position: absolute;
-    left: 80px;
-    top: 15px;
-    background: linear-gradient(to right, #6a11cb, #2575fc);
-    border: none;
-    border-radius: 5px;
-    color: white;
-    padding: 5px 10px;
-    cursor: pointer;
-    font-size: 1em;
-    transition: background 0.3s, transform 0.3s;
+    left: 70px;
+    top: 10px;
 }
 
-.add-new-topic:hover {
-    background: linear-gradient(to right, #5e10c8, #246ce1);
-    transform: scale(1.05);
-}
-
-/* Container styles */
 .container {
     display: flex;
     justify-content: space-between;
-    height: calc(100vh - 120px); /* Subtracting the height of header and footer */
-    margin-top: 60px; /* Ensuring content starts below the header */
+    height: calc(100vh - 100px); /* Subtracting the height of header and footer */
+    margin-top: 20px;
     padding: 20px;
-    overflow-y: auto;
+    box-sizing: border-box;
+    overflow: auto;
 }
 
-/* Left section styles */
-.left-section {
+.left-section, .right-section {
     flex: 1;
-    margin-right: 20px;
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
+    margin: 0 10px;
 }
 
-/* Right section styles */
-.right-section {
-    flex: 1;
-    margin-left: 20px;
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-}
-
-/* Notes section styles */
 .notes-section {
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    flex-grow: 1;
 }
 
 .notes-section h2 {
@@ -146,27 +108,20 @@ header .add-new-topic {
     overflow-y: auto;
 }
 
-/* Note card styles */
 .note {
     background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 15px;
-    padding: 20px;
-    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s, box-shadow 0.3s;
-    position: relative;
+    word-wrap: break-word;
     overflow: hidden;
-}
-
-.note:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .note h3 {
     margin: 0 0 10px;
-    font-size: 1.5em;
+    font-size: 1.2em;
     color: #333;
 }
 
@@ -175,25 +130,6 @@ header .add-new-topic {
     font-size: 1em;
     color: #555;
 }
-
-.note .delete-note {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    cursor: pointer;
-    color: #ff6b6b;
-    font-size: 1.2em;
-    transition: transform 0.3s;
-}
-
-.note .delete-note:hover {
-    transform: scale(1.2);
-}
-
-.note .delete-note:before {
-    content: '✖';
-}
-
 
 /* Other existing styles for cards and topics */
 .topic {
@@ -206,8 +142,8 @@ header .add-new-topic {
     display: flex;
     flex-direction: column;
     padding: 20px;
+    animation: fadeIn 0.5s ease-in-out;
     margin-bottom: 20px;
-    min-height: 150px; /* Ensure a minimum height for the cards */
 }
 
 .topic:hover {
@@ -230,12 +166,6 @@ header .add-new-topic {
 .topic-header .delete-button {
     cursor: pointer;
     color: #ff6b6b;
-    font-size: 1.2em;
-    transition: transform 0.3s;
-}
-
-.topic-header .delete-button:hover {
-    transform: scale(1.2);
 }
 
 .topic-body {
@@ -286,22 +216,22 @@ header .add-new-topic {
     transform: scale(1.05);
 }
 
-
 /* Stopwatch styles */
 .stopwatch {
     display: flex;
+    justify-content: center;
     align-items: center;
-    padding: 5px;
+    padding: 10px;
     background: #f8f8f8;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin: 20px auto;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 10;
     width: fit-content;
+    position: fixed;
+    top: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
 }
 
 #time {
@@ -317,7 +247,7 @@ header .add-new-topic {
     border-radius: 5px;
     background: linear-gradient(to right, #6a11cb, #2575fc);
     color: white;
-    font-size: 1em;
+    font-size: 0.9em;
 }
 
 .stopwatch button:hover {
@@ -325,14 +255,22 @@ header .add-new-topic {
     transform: scale(1.05);
 }
 
-/* Keyframes for animations */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.add-new-topic {
+    display: block;
+    width: fit-content;
+    margin: 20px auto;
+    padding: 10px 20px;
+    font-size: 1em;
+    color: white;
+    background: linear-gradient(to right, #6a11cb, #2575fc);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.3s;
+    text-align: center;
+}
+
+.add-new-topic:hover {
+    background: linear-gradient(to right, #5e10c8, #246ce1);
+    transform: scale(1.05);
 }
