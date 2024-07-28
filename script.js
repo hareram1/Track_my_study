@@ -1,77 +1,170 @@
-const topics = JSON.parse(localStorage.getItem('topics')) || [];
+document.addEventListener('DOMContentLoaded', (event) => {
+    const addTopicButton = document.querySelector('.add-new-topic');
+    const topicsContainer = document.querySelector('.left-section');
+    const noteTitleInput = document.getElementById('note-title');
+    const noteContentInput = document.getElementById('note-content');
+    const saveNoteButton = document.getElementById('save-note');
+    const notesContainer = document.getElementById('notes');
+    const stopwatchTime = document.getElementById('time');
+    const startStopButton = document.getElementById('startStop');
+    const resetButton = document.getElementById('reset');
 
-function saveTopics() {
-    localStorage.setItem('topics', JSON.stringify(topics));
-}
+    let topics = JSON.parse(localStorage.getItem('topics')) || [];
+    let notes = JSON.parse(localStorage.getItem('notes')) || [];
+    let isStopwatchRunning = false;
+    let stopwatchInterval;
+    let stopwatchTimeElapsed = 0;
 
-function addNewTopic() {
-    const name = prompt('Enter the topic name:');
-    const days = prompt('Enter the number of days to complete:');
-
-    if (name && days) {
-        topics.push({ name, days: parseInt(days), streak: 0 });
-        saveTopics();
-        renderTopics();
-    }
-}
-
-function incrementStreak(index) {
-    if (topics[index].streak < topics[index].days) {
-        topics[index].streak++;
-        saveTopics();
-        renderTopics();
-    } else {
-        alert('You have already completed this topic!');
-    }
-}
-
-function deleteTopic(index) {
-    topics.splice(index, 1);
-    saveTopics();
     renderTopics();
-}
+    renderNotes();
 
-function renderTopics() {
-    const topicsContainer = document.getElementById('topics');
-    topicsContainer.innerHTML = '';
+    addTopicButton.addEventListener('click', addNewTopic);
+    saveNoteButton.addEventListener('click', saveNote);
+    startStopButton.addEventListener('click', toggleStopwatch);
+    resetButton.addEventListener('click', resetStopwatch);
 
-    topics.forEach((topic, index) => {
-        const topicElement = document.createElement('div');
-        topicElement.className = 'topic';
+    function addNewTopic() {
+        const topicTitle = prompt('Enter the topic title:');
+        if (topicTitle) {
+            const days = parseInt(prompt('Enter the number of days to complete this topic:'), 10);
+            if (isNaN(days)) {
+                alert('Please enter a valid number of days.');
+                return;
+            }
+            const newTopic = {
+                id: Date.now(),
+                title: topicTitle,
+                days: days,
+                streak: 0,
+                completed: false,
+            };
+            topics.push(newTopic);
+            localStorage.setItem('topics', JSON.stringify(topics));
+            renderTopics();
+        }
+    }
 
-        const topicHeader = document.createElement('div');
-        topicHeader.className = 'topic-header';
-        topicHeader.innerHTML = `<h3>${topic.name}</h3>`;
+    function deleteTopic(id) {
+        topics = topics.filter(topic => topic.id !== id);
+        localStorage.setItem('topics', JSON.stringify(topics));
+        renderTopics();
+    }
 
-        const topicBody = document.createElement('div');
-        topicBody.className = 'topic-body';
-        topicBody.innerHTML = `
-            <p><strong>Days:</strong> ${topic.days}</p>
-            <p><strong>Streak:</strong> ${topic.streak}</p>
-        `;
+    function incrementStreak(id) {
+        const topic = topics.find(topic => topic.id === id);
+        if (topic && topic.streak < topic.days) {
+            topic.streak += 1;
+            if (topic.streak === topic.days) {
+                topic.completed = true;
+            }
+            localStorage.setItem('topics', JSON.stringify(topics));
+            renderTopics();
+        }
+    }
 
-        const progressBar = document.createElement('div');
-        progressBar.className = 'progress-bar';
-        const progress = document.createElement('div');
-        progress.className = 'progress';
-        progress.style.width = `${(topic.streak / topic.days) * 100}%`;
-        progressBar.appendChild(progress);
+    function markTopicAsDone(id) {
+        const topic = topics.find(topic => topic.id === id);
+        if (topic) {
+            topic.completed = true;
+            localStorage.setItem('topics', JSON.stringify(topics));
+            renderTopics();
+        }
+    }
 
-        const topicFooter = document.createElement('div');
-        topicFooter.className = 'topic-footer';
-        topicFooter.innerHTML = `
-            <span class="progress-label">${topic.streak}/${topic.days} days</span>
-            <button onclick="incrementStreak(${index})"><i class="fas fa-check"></i> Mark as Done</button>
-            <button class="delete-button" onclick="deleteTopic(${index})"><i class="fas fa-trash"></i> Delete</button>
-        `;
-        topicFooter.appendChild(progressBar);
+    function renderTopics() {
+        topicsContainer.innerHTML = '';
+        topics.forEach(topic => {
+            const topicCard = document.createElement('div');
+            topicCard.className = 'topic';
+            topicCard.innerHTML = `
+                <div class="topic-header">
+                    <h3>${topic.title}</h3>
+                    <span class="delete-button" onclick="deleteTopic(${topic.id})">✖</span>
+                </div>
+                <div class="topic-body">
+                    <p>Days: ${topic.days}</p>
+                    <p>Streak: ${topic.streak}</p>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: ${(topic.streak / topic.days) * 100}%"></div>
+                    </div>
+                </div>
+                <div class="topic-footer">
+                    <button onclick="incrementStreak(${topic.id})" ${topic.streak >= topic.days ? 'disabled' : ''}>Add Streak</button>
+                    <button onclick="markTopicAsDone(${topic.id})">${topic.completed ? 'Completed' : 'Mark as Done'}</button>
+                </div>
+            `;
+            topicsContainer.appendChild(topicCard);
+        });
+    }
 
-        topicElement.appendChild(topicHeader);
-        topicElement.appendChild(topicBody);
-        topicElement.appendChild(topicFooter);
+    function saveNote() {
+        const noteTitle = noteTitleInput.value;
+        const noteContent = noteContentInput.value;
+        if (noteTitle && noteContent) {
+            const newNote = {
+                id: Date.now(),
+                title: noteTitle,
+                content: noteContent,
+            };
+            notes.push(newNote);
+            localStorage.setItem('notes', JSON.stringify(notes));
+            renderNotes();
+            noteTitleInput.value = '';
+            noteContentInput.value = '';
+        }
+    }
 
-        topicsContainer.appendChild(topicElement);
-    });
-}
+    function deleteNote(id) {
+        notes = notes.filter(note => note.id !== id);
+        localStorage.setItem('notes', JSON.stringify(notes));
+        renderNotes();
+    }
 
-document.addEventListener('DOMContentLoaded', renderTopics);
+    function renderNotes() {
+        notesContainer.innerHTML = '';
+        notes.forEach(note => {
+            const noteCard = document.createElement('div');
+            noteCard.className = 'note';
+            noteCard.innerHTML = `
+                <h3>${note.title}</h3>
+                <p>${note.content}</p>
+                <span class="delete-note" onclick="deleteNote(${note.id})">✖</span>
+            `;
+            notesContainer.appendChild(noteCard);
+        });
+    }
+
+    function toggleStopwatch() {
+        if (isStopwatchRunning) {
+            clearInterval(stopwatchInterval);
+            startStopButton.textContent = 'Start';
+        } else {
+            stopwatchInterval = setInterval(() => {
+                stopwatchTimeElapsed += 1;
+                updateStopwatchDisplay();
+            }, 1000);
+            startStopButton.textContent = 'Stop';
+        }
+        isStopwatchRunning = !isStopwatchRunning;
+    }
+
+    function resetStopwatch() {
+        clearInterval(stopwatchInterval);
+        isStopwatchRunning = false;
+        stopwatchTimeElapsed = 0;
+        updateStopwatchDisplay();
+        startStopButton.textContent = 'Start';
+    }
+
+    function updateStopwatchDisplay() {
+        const hours = String(Math.floor(stopwatchTimeElapsed / 3600)).padStart(2, '0');
+        const minutes = String(Math.floor((stopwatchTimeElapsed % 3600) / 60)).padStart(2, '0');
+        const seconds = String(stopwatchTimeElapsed % 60).padStart(2, '0');
+        stopwatchTime.textContent = `${hours}:${minutes}:${seconds}`;
+    }
+
+    window.deleteTopic = deleteTopic;
+    window.incrementStreak = incrementStreak;
+    window.markTopicAsDone = markTopicAsDone;
+    window.deleteNote = deleteNote;
+});
