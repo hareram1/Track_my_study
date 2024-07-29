@@ -2,7 +2,7 @@
 body {
     font-family: Arial, sans-serif;
     margin: 0;
-    padding-top: 60px; /* To ensure content is not hidden behind header */
+    padding-top: 60px;
     padding-bottom: 50px; /* To ensure content is not hidden behind footer */
 }
 
