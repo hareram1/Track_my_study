@@ -183,7 +183,7 @@ header .add-new-topic:hover {
     flex-direction: column;
     padding: 20px;
     margin-bottom: 20px;
-    min-height: 150px; /* Ensure a minimum height for the cards */
+    min-height: 150px;
 }
 
 .topic:hover {
