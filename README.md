@@ -18,10 +18,7 @@
 - **Track Study Time:** A built-in stopwatch allows students to monitor their study time for each session.
 - **Intuitive Controls:** Start, stop, and reset the timer with a simple click.
 
-### 4. **Responsive Design**
-- **Flexible Layout:** The app's layout adapts to different screen sizes, providing a seamless experience on desktops, tablets, and smartphones.
-
-### 5. **Aesthetic Appeal**
+### 4. **Aesthetic Appeal**
 - **Beautiful UI:** The app features a clean and modern design with a touch of creativity. Each topic card is styled with gradients, shadows, and stickers, making the study experience visually appealing.
 - **Customizable Elements:** Users can personalize their experience by adding a logo and customizing the header.
 
