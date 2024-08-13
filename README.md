@@ -2,7 +2,7 @@
 
 ## Link to website : https://hareram1.github.io/Track_my_study/
 
-**Track My Study** is an interactive web application designed to help students track their study topics and take notes efficiently. The app combines functionality and aesthetics, making it a perfect tool for students who want to keep their studies organized and engaging
+**Track My Study** is an interactive web application designed to help students track their study topics and take notes efficiently. The app combines functionality and aesthetics, making it a perfect tool for students who want to keep their studies organized and engaging.
 
 ## Features
 
